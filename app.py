@@ -1,28 +1,20 @@
-
 import streamlit as st
+import google.generativeai as genai
 
-# Configuración básica
+# Configuración de la IA con tu llave secreta
+genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+model = genai.GenerativeModel('gemini-1.5-flash')
+
 st.set_page_config(page_title="Business Boss AI", page_icon="💼")
 
 st.title("💼 Business Boss AI")
 st.subheader("Tu Consultor de Estrategia y Ventas 24/7")
 
-# Botones de acción rápida
-st.markdown("### 🚀 Herramientas Rápidas")
-opcion = st.radio("Selecciona una tarea:", 
-                 ["Elegir...", "Guion de WhatsApp", "7 Días de Redes Sociales", "Email de Ventas"])
+# ... (el resto del código de los botones) ...
 
-if opcion == "Guion de WhatsApp":
-    st.write("👉 **Copia esto:** 'Hola, vi tu interés en nuestro producto. Solo por hoy tenemos un bono especial. ¿Te gustaría agendar una llamada?'")
-
-if opcion == "7 Días de Redes Sociales":
-    st.write("👉 **Idea Día 1:** Muestra el detrás de cámara de tu negocio.")
-
-# Chat
-st.markdown("---")
+# Lógica para que la IA responda de verdad
 user_input = st.text_input("Hazle una pregunta a tu consultor:")
 if user_input:
-    st.write(f"Analizando: '{user_input}'... (Aquí conectaremos tu Inteligencia pronto)")
+    response = model.generate_content(f"Actúa como un experto en negocios. Responde a: {user_input}")
+    st.write(response.text)
 
-st.sidebar.title("💎 Versión Premium")
-st.sidebar.write("Desbloquea análisis financiero avanzado.")
