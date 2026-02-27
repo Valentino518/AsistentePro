@@ -1,37 +1,42 @@
 import streamlit as st
 import google.generativeai as genai
 
-# Configuración de la IA
+# --- AI CONFIGURATION ---
 if "GOOGLE_API_KEY" in st.secrets:
     genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
     model = genai.GenerativeModel('gemini-1.5-flash')
 else:
-    st.error("Falta la clave API en los Secrets de Streamlit")
+    st.error("Missing GOOGLE_API_KEY in Streamlit Secrets")
 
+# --- PAGE SETUP ---
 st.set_page_config(page_title="Business Boss AI", page_icon="💼")
 
 st.title("💼 Business Boss AI")
-st.subheader("Tu Consultor de Estrategia y Ventas 24/7")
+st.subheader("Your 24/7 Strategy & Sales Consultant")
 
-# --- BOTONES DE PAGO EN LA BARRA LATERAL ---
-st.sidebar.title("💎 Versión Pro")
+# --- SIDEBAR & PAYMENTS ---
+st.sidebar.title("💎 Pro Version")
 st.sidebar.markdown(
-    f'<a href="TU_LINK_PAYPAL" target="_blank"><button style="width:100%; background-color:#0070ba; color:white; border:none; padding:10px; border-radius:5px; cursor:pointer;">Pagar con PayPal (USD)</button></a>',
+    f'<a href="YOUR_PAYPAL_LINK" target="_blank"><button style="width:100%; background-color:#0070ba; color:white; border:none; padding:10px; border-radius:5px; cursor:pointer;">Pay with PayPal (USD)</button></a>',
     unsafe_allow_html=True
 )
+
 st.sidebar.write("")
+
 st.sidebar.markdown(
-    f'<a href="TU_LINK_MERCADOPAGO" target="_blank"><button style="width:100%; background-color:#009ee3; color:white; border:none; padding:10px; border-radius:5px; cursor:pointer;">Pagar con Mercado Pago</button></a>',
+    f'<a href="YOUR_MERCADOPAGO_LINK" target="_blank"><button style="width:100%; background-color:#009ee3; color:white; border:none; padding:10px; border-radius:5px; cursor:pointer;">Pay with Mercado Pago</button></a>',
     unsafe_allow_html=True
 )
 
-# --- CHAT CON IA ---
-user_input = st.text_input("Hazle una pregunta a tu consultor:")
+# --- CHAT INTERFACE ---
+user_input = st.text_input("Ask your business consultant a question:")
+
 if user_input:
     try:
-        response = model.generate_content(f"Responde como experto en negocios: {user_input}")
+        # Prompt telling the AI how to behave
+        full_prompt = f"Act as an expert business consultant. Give practical and professional advice about: {user_input}"
+        response = model.generate_content(full_prompt)
+        st.write("💡 **Response:**")
         st.write(response.text)
     except Exception as e:
-        st.error("Hubo un error con la IA. Revisa tu clave API.")
-
-# Recuerda cambiar TU_LINK_PAYPAL y TU_LINK_MERCADOPAGO por tus links reales.
+        st.error("AI Error. Please check your API Key in Secrets.")
